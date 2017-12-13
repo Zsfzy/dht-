@@ -1,4 +1,5 @@
-from maga import Maga
+# from maga import Maga
+from bb2 import Maga
 
 import libtorrent as lt
 import logging
@@ -12,11 +13,15 @@ logging.basicConfig(level=logging.INFO)
 
 runPath = op.split(op.realpath(__file__))[0]
 
-def infohash_to_torrent(infohash):
+def sevaInfo(text):
+    f = open('info.text','a+')
+    f.write(text)
+    f.close
+
+async def infohash_to_torrent(infohash):
     ses = lt.session()
     ses.add_dht_router('router.bittorrent.com', 6881)
     ses.add_dht_router('router.utorrent.com', 6881)
-    ses.add_dht_router('router.bitcomet.com', 6881)
     ses.add_dht_router('dht.transmissionbt.com', 6881)
     ses.start_dht();
 
@@ -48,6 +53,7 @@ class Crawler(Maga):
      async def handler(self, infohash, addr):
         logging.info(addr)
         logging.info(infohash)
+        sevaInfo(infohash + '\n')
         infohash_to_torrent(infohash)
 
 # class Crawler(Maga):
@@ -65,6 +71,7 @@ class Crawler(Maga):
 #             )
 #         )
 
+
 crawler = Crawler()
-crawler.run(6881)
+crawler.run()
 # infohash_to_torrent('B5489D1B1397F1F2487A8A0851852563B08C70B7')
